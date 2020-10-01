@@ -27,7 +27,7 @@ class Handler(FileSystemEventHandler):
 
         # Determine ACME version
         try:
-            acme_version = 2 if 'acme-v02' in data['Account']['Registration']['uri'] else 1
+            acme_version = 2 if 'acme-v02' in data['Account']['Registration']['uri'] or 'acme-staging-v02' in data['Account']['Registration']['uri'] else 1
         except TypeError:
             if 'DomainsCertificate' in data:
                 acme_version = 1
@@ -139,8 +139,7 @@ if __name__ == "__main__":
     # Main loop to watch the directory
     observer.start()
     try:
-        while True:
-            time.sleep(1)
+        observer.join()
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
